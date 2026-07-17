@@ -11,6 +11,45 @@
 | ![Voxgig](https://www.voxgig.com/res/img/vgt01r.png) | This open source module is sponsored and supported by [Voxgig](https://www.voxgig.com). |
 |---|---|
 
+## Quick Example
+
+
+```js
+
+// Setup - get the key value (<SECRET>) separately from a vault or
+// environment variable.
+Seneca()
+  // Get API keys using the seneca-env plugin
+  .use('env', {
+    var: {
+      $MEETUP_APIKEY: String,
+      $MEETUP_USERTOKEN: String,
+    }
+  })
+  .use('provider', {
+    provider: {
+      meetup: {
+        keys: {
+          apikey: { value: '$MEETUP_APIKEY' },
+          usertoken: { value: '$MEETUP_USERTOKEN' },
+        }
+      }
+    }
+  })
+  .use('meetup-provider')
+
+let board = await seneca.entity('provider/meetup/board')
+  .load$('<meetup-board-id>')
+
+Console.log('BOARD', board)
+
+board.desc = 'New description'
+board = await board.save$()
+
+Console.log('UPDATED BOARD', board)
+
+```
+
 ## Install
 
 ```sh
